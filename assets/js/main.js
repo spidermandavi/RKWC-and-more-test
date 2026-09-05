@@ -32,7 +32,10 @@ const activePage = currentPage === 'index.html'
         : null;
 
 navLinks.forEach(link => {
-  link.classList.toggle('active', activePage !== null && link.getAttribute('href') === activePage);
+  const isActive = activePage !== null && link.getAttribute('href') === activePage;
+  link.classList.toggle('active', isActive);
+  if (isActive) link.setAttribute('aria-current', 'page');
+  else link.removeAttribute('aria-current');
 });
 
 if (menuButton && menuPanel) {
@@ -52,6 +55,7 @@ if (menuButton && menuPanel) {
   const setOpen = (open) => {
     menuButton.setAttribute('aria-expanded', String(open));
     menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menuPanel.setAttribute('aria-hidden', String(!open));
     menuPanel.classList.toggle('open', open);
 
     if (open) {
@@ -82,6 +86,8 @@ if (menuButton && menuPanel) {
       first.focus();
     }
   };
+
+  setOpen(false);
 
   menuButton.addEventListener('click', (event) => {
     event.stopPropagation();
